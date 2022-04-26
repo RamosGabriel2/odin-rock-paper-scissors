@@ -5,25 +5,27 @@ function computerPlay(){
 }
 
 function playRound(playerSelection){
+
+    let winner = 0;
     let computerSelection = computerPlay();
     let computerSelectionString = stringChoice(computerSelection);
     let playerSelectionString = stringChoice(playerSelection);
+    const roundText = document.querySelector('#result');
 
-    console.log(`You play ${playerSelectionString} and computer play ${computerSelectionString} \n\n`)
+    // console.log(`You play ${playerSelectionString} and computer play ${computerSelectionString} \n\n`)
 
-    let winner = 0;
     switch (computerSelection){
         case 0:
             switch(playerSelection){
                 case 0:
-                    console.log('Draw, both chose Rock!')
+                    roundText.textContent = 'Draw, both chose Rock!'
                     break;
                 case 1:
-                    console.log('You win, Paper beats Rock!')
+                    roundText.textContent = 'You win, Paper beats Rock!'
                     winner = 1;
                     break;
                 default:
-                    console.log('You lose, Rock beats Scissors!')
+                    roundText.textContent = 'You lose, Rock beats Scissors!'
                     winner = 2;
                     break;
             }
@@ -31,14 +33,14 @@ function playRound(playerSelection){
         case 1:
             switch(playerSelection){
                 case 0:
-                    console.log('You lose, Paper beats Rock!')
+                    roundText.textContent = 'You lose, Paper beats Rock!'
                     winner = 2;
                     break;
                 case 1:
-                    console.log('Draw, both chose Paper!')
+                    roundText.textContent = 'Draw, both chose Paper!'
                     break;
                 default:
-                    console.log('You win, Scissors beats Paper!')
+                    roundText.textContent = 'You win, Scissors beats Paper!'
                     winner = 1;
                     break;
             }
@@ -46,15 +48,15 @@ function playRound(playerSelection){
         default:
             switch(playerSelection){
                 case 0:
-                    console.log('You win, Rock beats Scissors!')
+                    roundText.textContent = 'You win, Rock beats Scissors!'
                     winner = 1;
                     break;
                 case 1:
-                    console.log('You lose, Scissors beats!')
+                    roundText.textContent = 'You lose, Scissors beats Paper!'
                     winner = 2;
                     break;
                 default:
-                    console.log('Draw, both chose Scissors')
+                    roundText.textContent = 'Draw, both chose Scissors'
                     break;
             }
             break;
@@ -64,97 +66,51 @@ function playRound(playerSelection){
 
 (function game(){
 
-    let value = 2;
-    let scoreComputer = 0;
+    let result = 0;
     let scorePlayer = 0;
+    let scoreComputer = 0;
 
-    // plays 5 rounds
+    let scoreP = document.querySelector('#scoreP')
+    let scoreC = document.querySelector('#scoreC')
+    const btnChoice = document.querySelectorAll('button')
 
-    for(i=0; i<5; i++){
-
-        let aux = 0;
-        do{
-            let choice = window.prompt('Choose (Rock, Paper or Scissors):');
-            choice = choice.toLowerCase();
-
-            switch(choice){
-                case 'rock':
-                    value = 0
-                    aux = 1;
-                    break;
-                case 'paper':
-                    value = 1
-                    aux = 1;
-                    break;
-                case 'scissors':
-                    aux = 1;
-                    break;
-                default:
-                    break;
-            }
-
-        }while(aux!=1)
-
-        let result = playRound(value);
-        if(result === 1){
-            scorePlayer++;
-        }else if(result === 2){
-            scoreComputer++;
+    btnChoice.forEach(choice => choice.addEventListener('click', (event) => {
+        let playerChoice = Number(event.target.value)
+        result = playRound(playerChoice)
+        
+        switch(result){
+            case 1:
+                scorePlayer++;
+                break;
+            case 2:
+                scoreComputer++;
+                break;
+            default:
+                break;
         }
-    }
 
-    // best of 5
+        scoreP.textContent = scorePlayer;
+        scoreC.textContent = scoreComputer;
 
-    // for(i=5, j=5; i>0 && j>0;){
+        if(scoreComputer>4 || scorePlayer>4){
+            btnChoice.forEach(choice => choice.disabled = true)
+        }
+    }))
 
-    //     let aux = 0;
-    //     do{
-    //         let choice = window.prompt('Choose (Rock, Paper or Scissors):');
-    //         choice = choice.toLowerCase();
-
-    //         switch(choice){
-    //             case 'rock':
-    //                 value = 0
-    //                 aux = 1;
-    //                 break;
-    //             case 'paper':
-    //                 value = 1
-    //                 aux = 1;
-    //                 break;
-    //             case 'scissors':
-    //                 aux = 1;
-    //                 break;
-    //             default:
-    //                 break;
-    //         }
-
-    //     }while(aux!=1)
-
-    //     let result = playRound(value);
-    //     if(result === 1){
-    //         scorePlayer++;
-    //         i--;
-    //     }else if(result === 2){
-    //         scoreComputer++;
-    //         j--;
-    //     }
-    // }
-
-    console.log(`\n Score: \n Player = ${scorePlayer} , Computer = ${scoreComputer}`);
 })()
 
-function stringChoice(choice){
-    let aux = ""
+function stringChoice(selection){
+    let aux = ''
 
-    switch(choice){
+    switch(selection){
         case 0:
-            aux = "rock"
+            aux = 'rock'
             break;
         case 1:
-            aux = "paper"
+            aux = 'paper'
             break;
         default:
-            aux = "scissors"
+            aux = 'scissors'
             break;
     }
     return aux;
